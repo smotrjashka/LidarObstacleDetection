@@ -114,7 +114,10 @@ The workspace provided in the SFND classroom comes preinstallated with everythin
 
 ### WINDOWS
 
-#### Install via cvpkg
+
+#### Way was given by udacity
+
+##### Install via cvpkg
 
 1. Follow the steps [here](https://pointclouds.org/downloads/) to install PCL.
 
@@ -137,8 +140,29 @@ The workspace provided in the SFND classroom comes preinstallated with everythin
    ./environment
    ```
 
-#### Build from Source
+##### Build from Source
 
 [PCL Source Github](https://github.com/PointCloudLibrary/pcl)
 
 [PCL Mac Compilation Docs](https://pcl.readthedocs.io/projects/tutorials/en/latest/compiling_pcl_macosx.html#compiling-pcl-macosx)
+
+But, its unusfull.
+And use any open source library on Windows is very chellenging.
+
+#### My way to fix it and little bit sad story
+
+For start, I installed pcl from vcpkg (for visual studio)
+Normally, this way is most eficient. But not this time.
+
+It had problem with visualisation part:
+
+#include <pcl/visualization/pcl_visualizer.h> was all time underlined and durng debug or build throw exception
+
+fatal error C1083: Cannot open include file: 'pcl/visualization/pcl_visualizer.h': No such file or directory
+
+Only thing that consolate me was that this problem had a lot of other VS users on Windows
+
+After long time investigation I found this instruction https://github.com/PointCloudLibrary/pcl/issues/4462
+
+I need to do some additional things. Because all-in-one install really didnt write all paths, only part of them. You need to determine wich paths was already written and wich ones was not.
+
