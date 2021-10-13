@@ -51,6 +51,13 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(ty
     roof.setInputCloud(cloudRegion);
     roof.filter(indices);
 
+    pcl::PointIndices::Ptr inliers {new pcl::PointIndices};
+    for(int point : indices){
+        inliners->indices.push_back(point);
+    }
+
+    pcl::ExtractIndices<PointT> extract;
+
 
     auto endTime = std::chrono::steady_clock::now();
     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
