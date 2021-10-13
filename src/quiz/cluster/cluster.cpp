@@ -109,10 +109,7 @@ std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<flo
 
         for (int i = 0; i < ponts.size(); i++)
         {
-            if (processed[i])
-            {
-                continue;
-            }
+            if (processed[i]){ continue;   }
 
             std::vector<int> cluster;
             ///for dealocation optimization
