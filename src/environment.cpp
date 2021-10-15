@@ -109,13 +109,31 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
    // ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
   //  pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");
 
-    auto streamIter = inputCloud.begin();
+  //  auto streamIter = inputCloud.begin();
 
-    pcl::PointCloud<pcl::PointXYZI>;
+    inputCloud = pointProcessorI.FilterCloud(inputCloud, 0.3f,Eigen::Vector4f(-10,-5,-2,1),Eigen::Vector4f(30,8,1,1));
+
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudPair = pointProcessorI.SegmentPlaneRansac(inputCloud,25,0.2);
+    renderPointCloud(viewer, cloudPair.second, "planeCloud", Color(0,1,0));
+    //renderPointCloud(viewer,cloudPair.first,"obstCloud", Color(0,1,0));
+
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessorI.KdTreeClustering(cloudPair.first, 0.9, 3, 3000);
+
+    int clusterId = 0;
+    std::vector<Color> colors = {Color(1,0,0), Color(0,1,0), Color(0,0,1)};
+
+    //why its highlighted like endless loop???
+    for (pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters){
+        pointProcessorI.numPoints(cluster);
+        renderPointCloud(viewer, cluster, "obstacleCloud"+std::to_string(clusterId),colors[clusterId%3]);
+        clusterId++;
+        Box box = pointProcessorI.BoundingBox(cluster);
+        renderBox(viewer, box, clusterId);
+    }
 
 
 
-    renderPointCloud(viewer,inputCloud,"inputCloud");
+  //  renderPointCloud(viewer,inputCloud,"inputCloud");
 }
 
 int main (int argc, char** argv)
